@@ -1,0 +1,14 @@
+/*
+** ESGI PROJECT, 2025
+** reset.css
+** File description:
+** reset
+*/
+
+* {
+    padding: 0;
+    border: 0;
+    margin: 0;
+    font-weight: normal;
+    font-size: 18px;
+}
