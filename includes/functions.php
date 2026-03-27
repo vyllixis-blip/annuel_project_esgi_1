@@ -47,6 +47,35 @@ function fmtNumber(int|float $n): string {
     return number_format($n, 0, ',', ' ');
 }
 
+/** Generate unique gradient CSS for games */
+function gameGradient(int $gameId = 1, string $difficulty = '', string $graphics = ''): string {
+    // Color palette based on difficulty
+    $difficultyColors = [
+        'Très Facile' => ['#10b981', '#34d399'],
+        'Facile' => ['#3b82f6', '#60a5fa'],
+        'Moyen' => ['#f59e0b', '#fbbf24'],
+        'Difficile' => ['#ef4444', '#f87171'],
+    ];
+
+    // Accent colors based on graphics
+    $graphicsColors = [
+        '2D Pixel Art' => '8b5cf6',
+        '2D Stylisé' => 'a855f7',
+        '3D Stylisé' => '06b6d4',
+        '3D Réaliste' => '6366f1',
+        '3D Abstrait' => 'ec4899',
+    ];
+
+    $baseGradient = $difficultyColors[$difficulty] ?? ['#667eea', '#764ba2'];
+    $accentColor = $graphicsColors[$graphics] ?? 'f472b6';
+    $rotationVar = ($gameId * 13) % 360;
+
+    $color1 = $baseGradient[0];
+    $color2 = $baseGradient[1];
+
+    return "linear-gradient({$rotationVar}deg, {$color1}, #{$accentColor}, {$color2})";
+}
+
 /* ─── URL Helpers ───────────────────────────────────────────────── */
 
 /** Build an absolute URL from a root-relative path */
@@ -101,14 +130,98 @@ function flashHtml(): string {
     return $html;
 }
 
-/* ─── Data helpers ──────────────────────────────────────────────── */
+/* ─── CSV Data helpers ──────────────────────────────────────────── */
 
-/** Find a game by id from the mock array */
+/** Load games from CSV file */
+function loadGamesFromCSV(string $csvPath): array {
+    $games = [];
+    if (!file_exists($csvPath)) {
+        return [];
+    }
+    
+    $file = fopen($csvPath, 'r');
+    $headers = fgetcsv($file);
+    if (!$headers) return [];
+    
+    while (($row = fgetcsv($file)) !== false) {
+        // Skip empty rows and ensure row length matches headers
+        if (empty(array_filter($row)) || count($row) !== count($headers)) {
+            continue;
+        }
+        
+        $game = array_combine($headers, $row);
+        if ($game !== false) {
+            // Parse multi-value fields
+            $game['platforms'] = array_filter(explode('|', $game['platforms'] ?? ''));
+            $games[] = $game;
+        }
+    }
+    fclose($file);
+    return $games;
+}
+
+/** Find a game by id from the games array */
 function findGame(int $id, array $games): ?array {
     foreach ($games as $g) {
         if ((int)$g['id'] === $id) return $g;
     }
     return null;
+}
+
+/** Filter games advanced criteria */
+function filterGamesAdvanced(
+    array $games, 
+    string $q = '', 
+    string $difficulty = '',
+    string $graphics = '',
+    string $audience = '',
+    string $sort = 'rating'
+): array {
+    // Text search
+    if ($q !== '') {
+        $q_low = mb_strtolower($q);
+        $games = array_filter($games, fn($g) =>
+            str_contains(mb_strtolower($g['title'] ?? ''), $q_low) ||
+            str_contains(mb_strtolower($g['genre'] ?? ''), $q_low) ||
+            str_contains(mb_strtolower($g['description'] ?? ''), $q_low)
+        );
+    }
+    
+    // Difficulty filter
+    if ($difficulty !== '') {
+        $games = array_filter($games, fn($g) =>
+            str_contains($g['difficulty'] ?? '', $difficulty)
+        );
+    }
+    
+    // Graphics style filter
+    if ($graphics !== '') {
+        $games = array_filter($games, fn($g) =>
+            str_contains($g['graphics_style'] ?? '', $graphics)
+        );
+    }
+    
+    // Target audience filter
+    if ($audience !== '') {
+        $games = array_filter($games, fn($g) =>
+            str_contains($g['target_audience'] ?? '', $audience)
+        );
+    }
+    
+    $games = array_values($games);
+    
+    // Sorting
+    usort($games, match($sort) {
+        'newest' => fn($a,$b) => (int)$b['year'] <=> (int)$a['year'],
+        'oldest' => fn($a,$b) => (int)$a['year'] <=> (int)$b['year'],
+        'az'     => fn($a,$b) => strcmp($a['title'], $b['title']),
+        'za'     => fn($a,$b) => strcmp($b['title'], $a['title']),
+        'price_low' => fn($a,$b) => (($a['price_eur'] == 'Gratuit (F2P)' ? 0 : (float)str_replace(',', '.', $a['price_eur'])) <=> ($b['price_eur'] == 'Gratuit (F2P)' ? 0 : (float)str_replace(',', '.', $b['price_eur']))),
+        'price_high' => fn($a,$b) => (($b['price_eur'] == 'Gratuit (F2P)' ? 0 : (float)str_replace(',', '.', $b['price_eur'])) <=> ($a['price_eur'] == 'Gratuit (F2P)' ? 0 : (float)str_replace(',', '.', $a['price_eur']))),
+        default  => fn($a,$b) => (float)$b['rating'] <=> (float)$a['rating'],
+    });
+    
+    return $games;
 }
 
 /** Filter games by query string */

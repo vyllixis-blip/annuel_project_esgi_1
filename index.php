@@ -123,7 +123,8 @@ function badgeClass(string $type): string {
         </div>
         <ul class="nav-links">
             <li><a href="index.php" class="active">Accueil</a></li>
-            <li><a href="pages/games.php">Jeux</a></li>
+            <li><a href="pages/discover.php">🎯 Découvrir</a></li>
+            <li><a href="pages/games.php">Catalogue</a></li>
             <li><a href="pages/categories.php">Catégories</a></li>
             <li><a href="pages/collections.php">Collections</a></li>
             <?php if (isset($_SESSION['user_id'])): ?>
@@ -156,20 +157,20 @@ function badgeClass(string $type): string {
                 </div>
 
                 <h1 class="hero-title">
-                    Découvrez,<br>
-                    Cataloguez &amp;<br>
-                    <span class="gradient-text">Partagez vos jeux</span>
+                    Trouvez votre<br>
+                    Prochain Jeu<br>
+                    <span class="gradient-text">Parfait</span>
                 </h1>
 
                 <p class="hero-description">
-                    La plateforme communautaire dédiée aux jeux vidéo. Plus de
-                    <strong>1&nbsp;400 titres</strong> référencés, des critiques authentiques
-                    et des collections personnalisées.
+                    Perdu dans la jungle des jeux vidéo ? Notre système intelligent de recommandation 
+                    vous aide à trouver <strong>exactement le jeu</strong> que vous cherchez selon votre 
+                    difficulté préférée, style graphique et public cible.
                 </p>
 
                 <!-- Search -->
                 <div class="hero-search">
-                    <form action="pages/games.php" method="GET">
+                    <form action="pages/discover.php" method="GET">
                         <svg class="hero-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
                         </svg>
@@ -177,7 +178,7 @@ function badgeClass(string $type): string {
                             type="text"
                             name="q"
                             class="hero-search-input"
-                            placeholder="Rechercher un jeu, une franchise, un studio…"
+                            placeholder="Chercher un jeu par titre, genre..."
                             autocomplete="off"
                         >
                         <button type="submit" class="hero-search-btn">Chercher</button>
@@ -187,17 +188,17 @@ function badgeClass(string $type): string {
                 <!-- Quick tags -->
                 <div class="hero-tags">
                     <?php
-                    $tags = ['Elden Ring', 'RPG', 'Soulslike', 'Indie', 'FPS', 'Stratégie', 'Co-op'];
+                    $tags = ['Action RPG', 'Pixelart', 'Facile', 'Sandbox', 'Story-driven', 'Multijoueur', 'Gratuit'];
                     foreach ($tags as $tag):
                     ?>
-                        <a href="pages/games.php?q=<?php echo urlencode($tag); ?>" class="hero-tag"><?php echo htmlspecialchars($tag); ?></a>
+                        <a href="pages/discover.php?q=<?php echo urlencode($tag); ?>" class="hero-tag"><?php echo htmlspecialchars($tag); ?></a>
                     <?php endforeach; ?>
                 </div>
 
                 <!-- CTA -->
                 <div class="hero-actions">
-                    <a href="pages/games.php" class="btn-primary">
-                        Explorer le catalogue
+                    <a href="pages/discover.php" class="btn-primary">
+                        🎯 Commencer la Découverte
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
                     </a>
                     <a href="pages/register.php" class="btn-secondary">
