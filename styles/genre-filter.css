@@ -1,0 +1,97 @@
+.genre-label {
+	display: inline-block;
+	margin: 1rem 0 0.65rem;
+	font-size: 0.84rem;
+	font-weight: 700;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: var(--color-text-muted);
+}
+
+.genre-checkboxes {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.6rem;
+	padding: 0.9rem;
+	border: 1px solid var(--color-border);
+	border-radius: 14px;
+	background:
+		radial-gradient(1200px 300px at -10% -100%, rgba(37, 99, 235, 0.16), transparent 40%),
+		linear-gradient(180deg, rgba(31, 41, 55, 0.55), rgba(17, 24, 39, 0.85));
+	box-shadow:
+		inset 0 1px 0 rgba(255, 255, 255, 0.03),
+		0 10px 30px rgba(0, 0, 0, 0.25);
+}
+
+.genre-filter-group {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.6rem;
+}
+
+.genre-checkboxes label {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.45rem;
+	padding: 0.45rem 0.8rem;
+	border: 1px solid var(--color-border-tag);
+	border-radius: 999px;
+	background: var(--color-surface-card);
+	color: var(--color-text-tag);
+	font-size: 0.86rem;
+	font-weight: 600;
+	cursor: pointer;
+	user-select: none;
+	transition: all 0.18s ease;
+}
+
+.genre-checkboxes label:hover {
+	border-color: var(--color-border-tag-hover);
+	color: var(--color-text-tag-hover);
+	transform: translateY(-1px);
+	box-shadow: 0 6px 14px rgba(0, 0, 0, 0.25);
+}
+
+.genre-checkboxes input[type="checkbox"] {
+	appearance: none;
+	width: 16px;
+	height: 16px;
+	border: 1.5px solid var(--color-checkbox-border);
+	border-radius: 4px;
+	background: var(--color-checkbox-bg);
+	display: grid;
+	place-content: center;
+	margin: 0;
+	transition: all 0.16s ease;
+}
+
+.genre-checkboxes input[type="checkbox"]::before {
+	content: "";
+	width: 9px;
+	height: 9px;
+	transform: scale(0);
+	transition: transform 0.14s ease-in-out;
+	box-shadow: inset 1em 1em var(--color-checkbox-check);
+	clip-path: polygon(14% 44%, 0 59%, 42% 100%, 100% 26%, 84% 12%, 42% 66%);
+}
+
+.genre-checkboxes input[type="checkbox"]:checked {
+	border-color: var(--color-primary);
+	background: linear-gradient(180deg, var(--color-primary), var(--color-primary-dark));
+}
+
+.genre-checkboxes input[type="checkbox"]:checked::before {
+	transform: scale(1);
+}
+
+.genre-checkboxes label:has(input[type="checkbox"]:checked) {
+	border-color: var(--color-primary-light);
+	background: linear-gradient(180deg, rgba(37, 99, 235, 0.18), rgba(37, 99, 235, 0.08));
+	color: var(--color-text-tag-active);
+	box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.14) inset;
+}
+
+.genre-checkboxes input[type="checkbox"]:focus-visible {
+	outline: 2px solid var(--color-focus-ring);
+	outline-offset: 2px;
+}

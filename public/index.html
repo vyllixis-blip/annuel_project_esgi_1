@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodexGame - Bibliothèque de jeux vidéo</title>
+    <link rel="stylesheet" type="text/css" href="/styles/index.css">
+    <script type="module" src="/src/main.js"></script>
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <main class="container">
+        <section class="hero">
+            <h2>Votre bibliothèque de jeux vidéo</h2>
+            <p>Une base claire et professionnelle pour organiser, rechercher et présenter vos jeux.</p>
+        </section>
+
+        <section class="search-section">
+            <label for="search-input" class="search-label">Rechercher un jeu</label>
+            <input id="search-input" type="text" placeholder="Ex: Elden Ring" class="search-input">
+            <p class="genre-label">Filtrer par genre</p>
+            <div id="genre-filter" class="genre-checkboxes"></div>
+        </section>
+        <section id="games-grid" class="games-grid"></section>
+    </main>
+    <div id="footer-placeholder"></div>
+</body>
+</html>

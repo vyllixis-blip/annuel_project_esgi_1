@@ -1,0 +1,51 @@
+.games-grid {
+	margin: 1.5rem 0 2.5rem;
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+	gap: 1rem;
+}
+
+.game-card {
+	padding: 0.6rem 0.8rem;
+	border: 1px solid var(--color-border);
+	border-radius: 10px;
+	background: var(--color-surface);
+	align-self: start;
+}
+
+.game-name {
+	margin: 0 0 0.5rem;
+	font-size: 1rem;
+	color: var(--color-primary);
+	font-weight: 700;
+}
+
+.game-card p {
+	margin: 0;
+	color: var(--color-text-muted);
+	font-size: 0.9rem;
+}
+
+.release-date,
+.platforms,
+.genres,
+.rating {
+	margin-top: 0.5rem;
+	color: var(--color-text-muted);
+	font-size: 0.8rem;
+}
+
+.price,
+.positive-ratings {
+	margin-top: 0.5rem;
+	color: var(--color-primary);
+	font-weight: 700;
+	font-size: 0.9rem;
+}
+
+.negative-ratings {
+	margin-top: 0.5rem;
+	color: var(--color-text-muted);
+	font-weight: 700;
+	font-size: 0.9rem;
+}

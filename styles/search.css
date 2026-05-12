@@ -1,0 +1,24 @@
+.search-section {
+	margin-top: 1.5rem;
+}
+
+.search-label {
+	display: block;
+	margin-bottom: 0.5rem;
+	color: var(--color-text-muted);
+	font-size: 0.9rem;
+}
+
+.search-input {
+	width: 100%;
+	padding: 0.8rem 1rem;
+	border: 1px solid var(--color-border);
+	border-radius: 10px;
+	background: var(--color-surface);
+	color: var(--color-text);
+}
+
+.search-input:focus-visible {
+	outline: 2px solid var(--color-primary);
+	outline-offset: 1px;
+}
