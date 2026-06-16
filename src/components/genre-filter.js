@@ -1,7 +1,29 @@
 import { createElement } from '../utils/dom.js'
 
-export function createGenreFilter(genres, onFilter) {
-	const wrapper = createElement('div', { className: 'genre-filter-group' })
+export function createGenreFilter(genres, onFilter, options) {
+	const config = options || {}
+	const maxVisible = Number.isInteger(config.maxVisible) && config.maxVisible > 0 ? config.maxVisible : 7
+	const showSearch = config.showSearch !== false
+	const searchPlaceholder = config.searchPlaceholder || 'Rechercher un filtre'
+
+	const panel = createElement('div', { className: 'genre-filter-panel' })
+	const wrapper = createElement('div', {
+		className: 'genre-filter-group filter-list',
+		attrs: {
+			style: 'max-height: calc(' + maxVisible + ' * 2.35rem)'
+		}
+	})
+
+	const filterLabels = []
+
+	function applySearchFilter(searchTerm) {
+		const normalizedSearch = searchTerm.trim().toLowerCase()
+
+		filterLabels.forEach(function(label) {
+			const value = label.dataset.value || ''
+			label.classList.toggle('hidden', normalizedSearch.length > 0 && !value.includes(normalizedSearch))
+		})
+	}
 
 	genres.forEach(function(genre) {
 		const checkbox = createElement('input', {
@@ -20,9 +42,39 @@ export function createGenreFilter(genres, onFilter) {
 			onFilter(selectedGenres)
 		})
 
-		const label = createElement('label', { text: genre }, [checkbox])
+		const text = createElement('span', {
+			className: 'genre-filter-text',
+			text: genre
+		})
+
+		const label = createElement('label', {
+			attrs: {
+				'data-value': genre.toLowerCase()
+			}
+		}, [checkbox, text])
+
+		filterLabels.push(label)
 		wrapper.appendChild(label)
 	})
 
-	return wrapper
+	if (showSearch) {
+		const searchInput = createElement('input', {
+			className: 'filter-search-input',
+			attrs: {
+				type: 'search',
+				placeholder: searchPlaceholder,
+				'aria-label': searchPlaceholder
+			}
+		})
+
+		searchInput.addEventListener('input', function(event) {
+			applySearchFilter(event.target.value)
+		})
+
+		panel.appendChild(searchInput)
+	}
+
+	panel.appendChild(wrapper)
+
+	return panel
 }

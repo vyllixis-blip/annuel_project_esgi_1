@@ -3,3 +3,5 @@
 @import './game-card.css';
 @import './genre-filter.css';
 @import './search.css';
+@import './pagination.css';
+@import './loading.css';

@@ -1,0 +1,12 @@
+{
+  "chunkSize": 5000,
+  "total": 27075,
+  "files": [
+    "games-1.json",
+    "games-2.json",
+    "games-3.json",
+    "games-4.json",
+    "games-5.json",
+    "games-6.json"
+  ]
+}

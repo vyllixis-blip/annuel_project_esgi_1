@@ -1,0 +1,51 @@
+.loading-state {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    background: linear-gradient(180deg, rgba(31, 41, 55, 0.6), rgba(17, 24, 39, 0.9));
+}
+
+.loading-spinner {
+    display: inline-block;
+    width: 26px;
+    height: 26px;
+    border-radius: 999px;
+    border: 3px solid rgba(148, 163, 184, 0.35);
+    border-top-color: var(--color-primary-light);
+    animation: spin 0.85s linear infinite;
+}
+
+.loading-text {
+    margin-top: 0.75rem;
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+}
+
+.loading-skeleton-grid {
+    margin-top: 1rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 0.75rem;
+}
+
+.loading-skeleton-card {
+    height: 92px;
+    border-radius: 10px;
+    border: 1px solid var(--color-border);
+    background: linear-gradient(110deg, rgba(51, 65, 85, 0.75) 8%, rgba(71, 85, 105, 0.95) 18%, rgba(51, 65, 85, 0.75) 33%);
+    background-size: 200% 100%;
+    animation: shimmer 1.2s ease-in-out infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes shimmer {
+    to {
+        background-position-x: -200%;
+    }
+}

@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CodexGame - Bibliothèque de jeux vidéo</title>
+    <link rel="icon" href="/favicon.ico">
+    <meta property="og:title" content="CodexGame - Bibliothèque de jeux vidéo">
+    <meta property="og:description" content="Explorez, recherchez et découvrez des milliers de jeux vidéo.">
+    <meta property="og:type" content="website">
     <link rel="stylesheet" type="text/css" href="/styles/index.css">
     <script type="module" src="/src/main.js"></script>
 </head>
@@ -14,15 +18,45 @@
         <section class="hero">
             <h2>Votre bibliothèque de jeux vidéo</h2>
             <p>Une base claire et professionnelle pour organiser, rechercher et présenter vos jeux.</p>
+            <div id="hero-stats" class="hero-stats"></div>
         </section>
 
-        <section class="search-section">
-            <label for="search-input" class="search-label">Rechercher un jeu</label>
-            <input id="search-input" type="text" placeholder="Ex: Elden Ring" class="search-input">
-            <p class="genre-label">Filtrer par genre</p>
-            <div id="genre-filter" class="genre-checkboxes"></div>
+        <section class="catalog-layout">
+            <div class="catalog-main">
+                <p id="results-count" class="results-count">0 jeux disponibles</p>
+                <section id="games-grid" class="games-grid"></section>
+                <div id="pagination" class="pagination"></div>
+            </div>
+
+            <aside class="search-section">
+                <label for="search-input" class="search-label">Rechercher un jeu</label>
+                <div class="search-wrapper">
+                    <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                        <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"></circle>
+                        <line x1="16.65" y1="16.65" x2="21" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round"></line>
+                    </svg>
+                    <input id="search-input" type="text" placeholder="Ex: Elden Ring" class="search-input">
+                </div>
+
+                <div class="filter-section filter-section--first">
+                    <div class="filter-header">
+                        <p class="genre-label">Filtrer par genre</p>
+                        <button id="reset-filters-btn" type="button" class="reset-filters-btn hidden">Effacer les filtres</button>
+                    </div>
+                    <div id="genre-filter" class="genre-checkboxes"></div>
+                </div>
+
+                <div class="filter-section">
+                    <p class="genre-label">Filtrer par plateforme</p>
+                    <div id="platform-filter" class="genre-checkboxes"></div>
+                </div>
+
+                <div class="filter-section">
+                    <p class="genre-label">Filtrer par prix</p>
+                    <div id="price-filter" class="genre-checkboxes"></div>
+                </div>
+            </aside>
         </section>
-        <section id="games-grid" class="games-grid"></section>
     </main>
     <div id="footer-placeholder"></div>
 </body>

@@ -12,6 +12,10 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'))
 })
 
+app.get('/game.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'game.html'))
+})
+
 app.listen(PORT, () => {
     console.info(`Serveur démarré sur http://localhost:${PORT}`)
 })

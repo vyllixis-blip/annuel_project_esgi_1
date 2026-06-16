@@ -8,6 +8,55 @@
 	color: var(--color-text-muted);
 }
 
+.filter-header {
+	margin-top: 0;
+	display: flex;
+	align-items: baseline;
+	justify-content: space-between;
+	gap: 0.75rem;
+}
+
+.filter-section {
+	padding-top: 1rem;
+}
+
+.filter-section--first {
+	padding-top: 0.25rem;
+}
+
+.filter-section + .filter-section {
+	border-top: 1px solid var(--color-border);
+	margin-top: 0.3rem;
+}
+
+.filter-header .genre-label {
+	margin: 0;
+}
+
+.reset-filters-btn {
+	border: 1px solid var(--color-border-tag-hover);
+	border-radius: 999px;
+	padding: 0.35rem 0.75rem;
+	font-size: 0.78rem;
+	font-weight: 700;
+	letter-spacing: 0.03em;
+	text-transform: uppercase;
+	background: rgba(37, 99, 235, 0.12);
+	color: var(--color-text-tag-active);
+	cursor: pointer;
+	transition: all 0.18s ease;
+}
+
+.reset-filters-btn:hover {
+	background: rgba(37, 99, 235, 0.2);
+	border-color: var(--color-primary-light);
+}
+
+.reset-filters-btn:focus-visible {
+	outline: 2px solid var(--color-focus-ring);
+	outline-offset: 2px;
+}
+
 .genre-checkboxes {
 	display: flex;
 	flex-wrap: wrap;
@@ -21,12 +70,76 @@
 	box-shadow:
 		inset 0 1px 0 rgba(255, 255, 255, 0.03),
 		0 10px 30px rgba(0, 0, 0, 0.25);
+	overflow: hidden;
 }
 
 .genre-filter-group {
 	display: flex;
 	flex-wrap: wrap;
 	gap: 0.6rem;
+}
+
+.genre-filter-panel {
+	display: flex;
+	flex-direction: column;
+	gap: 0.55rem;
+	width: 100%;
+	min-width: 0;
+}
+
+.filter-search-input {
+	width: 100%;
+	max-width: 100%;
+	padding: 0.55rem 0.75rem;
+	border: 1px solid var(--color-border);
+	border-radius: 10px;
+	background: var(--color-surface-card);
+	color: var(--color-text);
+	font-size: 0.85rem;
+}
+
+.filter-search-input:focus-visible {
+	outline: 2px solid var(--color-focus-ring);
+	outline-offset: 1px;
+}
+
+.genre-filter-group.filter-list {
+	flex-wrap: nowrap;
+	flex-direction: column;
+	gap: 0.45rem;
+	overflow-y: auto;
+	overflow-x: hidden;
+	padding-right: 0.25rem;
+}
+
+.genre-filter-group.filter-list::-webkit-scrollbar {
+	width: 4px;
+}
+
+.genre-filter-group.filter-list::-webkit-scrollbar-track {
+	background: transparent;
+}
+
+.genre-filter-group.filter-list::-webkit-scrollbar-thumb {
+	background: var(--color-border);
+	border-radius: 999px;
+}
+
+.genre-filter-group.filter-list::-webkit-scrollbar-thumb:hover {
+	background: var(--color-primary);
+}
+
+.genre-filter-group.filter-list label {
+	width: 100%;
+	justify-content: flex-start;
+	border-radius: 10px;
+	padding: 0.5rem 0.75rem;
+}
+
+.genre-filter-text {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 
 .genre-checkboxes label {
@@ -43,6 +156,10 @@
 	cursor: pointer;
 	user-select: none;
 	transition: all 0.18s ease;
+}
+
+.genre-checkboxes label.hidden {
+	display: none;
 }
 
 .genre-checkboxes label:hover {
@@ -92,6 +209,50 @@
 }
 
 .genre-checkboxes input[type="checkbox"]:focus-visible {
+	outline: 2px solid var(--color-focus-ring);
+	outline-offset: 2px;
+}
+
+.genre-checkboxes input[type="radio"] {
+	appearance: none;
+	width: 16px;
+	height: 16px;
+	border: 1.5px solid var(--color-checkbox-border);
+	border-radius: 999px;
+	background: var(--color-checkbox-bg);
+	display: grid;
+	place-content: center;
+	margin: 0;
+	transition: all 0.16s ease;
+}
+
+.genre-checkboxes input[type="radio"]::before {
+	content: "";
+	width: 8px;
+	height: 8px;
+	border-radius: 999px;
+	background: var(--color-checkbox-check);
+	transform: scale(0);
+	transition: transform 0.14s ease-in-out;
+}
+
+.genre-checkboxes input[type="radio"]:checked {
+	border-color: var(--color-primary);
+	background: linear-gradient(180deg, var(--color-primary), var(--color-primary-dark));
+}
+
+.genre-checkboxes input[type="radio"]:checked::before {
+	transform: scale(1);
+}
+
+.genre-checkboxes label:has(input[type="radio"]:checked) {
+	border-color: var(--color-primary-light);
+	background: linear-gradient(180deg, rgba(37, 99, 235, 0.18), rgba(37, 99, 235, 0.08));
+	color: var(--color-text-tag-active);
+	box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.14) inset;
+}
+
+.genre-checkboxes input[type="radio"]:focus-visible {
 	outline: 2px solid var(--color-focus-ring);
 	outline-offset: 2px;
 }
