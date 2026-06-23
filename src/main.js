@@ -22,6 +22,11 @@ const appState = {
     isInitialized: false
 }
 
+/**
+ * hydrateStateFromUrl sert à récupérer l'état de l'application à partir de 
+ * l'URL et à le stocker dans appState. Cela permet de maintenir les filtres et
+ * la pagination même après un rafraîchissement de la page ou un partage de l'URL.
+ */
 function hydrateStateFromUrl() {
     const stateFromUrl = readStateFromUrl()
 
@@ -50,6 +55,13 @@ function hydrateStateFromUrl() {
     }
 }
 
+/**
+ * extractUniqueGenres prend un tableau de jeux et retourne un tableau de genres
+ * uniques, triés par fréquence d'apparition dans les jeux. Les genres les plus 
+ * fréquents apparaissent en premier.
+ * @param {Array} games - Un tableau d'objets représentant les jeux.
+ * @returns {Array} - Un tableau de genres uniques triés par fréquence.
+ */
 function extractUniqueGenres(games) {
     const genreCount = {}
 
@@ -64,6 +76,13 @@ function extractUniqueGenres(games) {
     })
 }
 
+/**
+ * extractUniquePlatforms prend un tableau de jeux et retourne un tableau de
+ * plateformes uniques, triées par fréquence d'apparition dans les jeux. Les 
+ * plateformes les plus fréquentes apparaissent en premier.
+ * @param {Array} games - Un tableau d'objets représentant les jeux.
+ * @returns {Array} - Un tableau de plateformes uniques triés par fréquence.
+ */
 export function extractUniquePlatforms(games) {
     const platformCount = {}
 
@@ -78,6 +97,12 @@ export function extractUniquePlatforms(games) {
     })
 }
 
+/**
+ * renderGamesGrid prend un tableau de jeux et les affiche dans la grille de jeux.
+ * Si aucun jeu n'est trouvé, il affiche un état vide avec un bouton pour 
+ * réinitialiser les filtres.
+ * @param {Array} games - Un tableau d'objets représentant les jeux à afficher.
+ */
 function renderGamesGrid(games) {
     const gamesGrid = qs('#games-grid')
     clearElement(gamesGrid)
@@ -92,6 +117,11 @@ function renderGamesGrid(games) {
     })
 }
 
+/**
+ * updateResetButtonVisibility met à jour la visibilité du bouton de
+ * réinitialisation des filtres en fonction de l'état actuel des filtres. Si 
+ * aucun filtre n'est actif, le bouton est masqué.
+ */
 function updateResetButtonVisibility() {
     const resetButton = qs('#reset-filters-btn')
 
@@ -109,6 +139,10 @@ function updateResetButtonVisibility() {
     resetButton.classList.toggle('hidden', !hasActiveFilters)
 }
 
+/**
+ * resetFilters réinitialise tous les filtres et la pagination à leurs valeurs par défaut.
+ * Elle met également à jour l'interface utilisateur en conséquence.
+ */
 export function resetFilters() {
     appState.searchTerm = ''
     appState.selectedGenres = []
@@ -164,6 +198,12 @@ export function resetFilters() {
     renderFilteredGames()
 }
 
+/**
+ * buildPageNumbers génère un tableau de numéros de page à afficher dans la pagination.
+ * Il inclut les pages autour de la page actuelle et ajoute des ellipses pour les pages manquantes.
+ * @param {number} totalPages - Le nombre total de pages disponibles.
+ * @returns {Array} - Un tableau contenant les numéros de page et des valeurs null pour les ellipses.
+ */
 function buildPageNumbers(totalPages) {
     const pages = []
     const delta = 2
@@ -190,12 +230,20 @@ function buildPageNumbers(totalPages) {
     return withEllipsis
 }
 
+/**
+ * goToPage met à jour la page actuelle et recharge les jeux filtrés.
+ * @param {number} page - Le numéro de la page à afficher.
+ */
 function goToPage(page) {
     appState.currentPage = page
     renderFilteredGames()
     window.scrollTo({ top: 0, behavior: 'smooth' })
 }
 
+/**
+ * renderPagination génère et affiche les boutons de pagination en fonction du nombre total de jeux.
+ * @param {number} totalGames - Le nombre total de jeux disponibles.
+ */
 function renderPagination(totalGames) {
     const pagination = qs('#pagination')
     clearElement(pagination)
@@ -271,10 +319,22 @@ function renderPagination(totalGames) {
     pagination.appendChild(nextButton)
 }
 
+/**
+ * formatCount formate un nombre en utilisant la locale française pour l'affichage.
+ * @param {number} value - Le nombre à formater.
+ * @returns {string} - Le nombre formaté en chaîne de caractères.
+ */
 function formatCount(value) {
     return Number(value).toLocaleString('fr-FR')
 }
 
+/**
+ * formatPlatformName formate le nom d'une plateforme pour l'affichage.
+ * Si le nom est court (3 caractères ou moins), il est mis en majuscules.
+ * Sinon, seule la première lettre est mise en majuscule.
+ * @param {string} platform - Le nom de la plateforme à formater.
+ * @returns {string} - Le nom de la plateforme formaté.
+ */
 function formatPlatformName(platform) {
     if (!platform) {
         return ''
@@ -287,6 +347,11 @@ function formatPlatformName(platform) {
     return platform.charAt(0).toUpperCase() + platform.slice(1)
 }
 
+/**
+ * renderHeroStats met à jour les statistiques affichées dans la section "hero-stats" de l'interface.
+ * Elle calcule le nombre de jeux, de genres et de plateformes uniques à partir du tableau de jeux fourni.
+ * @param {Array} games - Un tableau d'objets représentant les jeux.
+ */
 function renderHeroStats(games) {
     const statsHost = qs('#hero-stats')
 
@@ -341,6 +406,11 @@ function renderHeroStats(games) {
     })
 }
 
+/**
+ * updateResultsCount met à jour le compteur de résultats affiché dans l'interface.
+ * @param {number} count - Le nombre de jeux trouvés.
+ * @param {number} total - Le nombre total de jeux disponibles.
+ */
 export function updateResultsCount(count, total) {
     const counter = qs('#results-count')
 
@@ -356,10 +426,22 @@ export function updateResultsCount(count, total) {
     counter.textContent = formatCount(count) + ' jeux trouvés'
 }
 
+/**
+ * matchesSearch vérifie si le nom d'un jeu correspond au terme de recherche.
+ * @param {Object} game - L'objet représentant le jeu.
+ * @param {string} searchTerm - Le terme de recherche.
+ * @returns {boolean} - true si le nom du jeu correspond au terme de recherche, false sinon.
+ */
 function matchesSearch(game, searchTerm) {
     return game.name.toLowerCase().includes(searchTerm)
 }
 
+/**
+ * matchesGenres vérifie si un jeu correspond aux genres sélectionnés.
+ * @param {Object} game - L'objet représentant le jeu.
+ * @param {Array} selectedGenres - Les genres sélectionnés.
+ * @returns {boolean} - true si le jeu correspond aux genres sélectionnés, false sinon.
+ */
 function matchesGenres(game, selectedGenres) {
     if (!selectedGenres.length) {
         return true
@@ -370,6 +452,12 @@ function matchesGenres(game, selectedGenres) {
     })
 }
 
+/**
+ * matchesPlatforms vérifie si un jeu correspond aux plateformes sélectionnées.
+ * @param {Object} game - L'objet représentant le jeu.
+ * @param {Array} selectedPlatforms - Les plateformes sélectionnées.
+ * @returns {boolean} - true si le jeu correspond aux plateformes sélectionnées, false sinon.
+ */
 export function matchesPlatforms(game, selectedPlatforms) {
     if (!selectedPlatforms.length) {
         return true
@@ -380,6 +468,12 @@ export function matchesPlatforms(game, selectedPlatforms) {
     })
 }
 
+/**
+ * matchesPrice vérifie si le prix d'un jeu est inférieur ou égal au prix maximum sélectionné.
+ * @param {Object} game - L'objet représentant le jeu.
+ * @param {number} maxPrice - Le prix maximum sélectionné.
+ * @returns {boolean} - true si le prix du jeu est inférieur ou égal au prix maximum, false sinon.
+ */
 export function matchesPrice(game, maxPrice) {
     if (maxPrice === Infinity) {
         return true
@@ -398,6 +492,12 @@ export function matchesPrice(game, maxPrice) {
     return parsedPrice <= maxPrice
 }
 
+/**
+ * normalizePrice convertit une chaîne de caractères représentant un prix en un nombre flottant.
+ * Si la conversion échoue, elle retourne 0.
+ * @param {string|number} price - Le prix à normaliser.
+ * @returns {number} - Le prix normalisé en nombre flottant.
+ */
 function normalizePrice(price) {
     const parsedPrice = Number.parseFloat(String(price).replace(',', '.'))
 
@@ -408,6 +508,12 @@ function normalizePrice(price) {
     return parsedPrice
 }
 
+/**
+ * normalizePositiveRatings convertit une chaîne de caractères représentant le nombre d'avis positifs en un nombre.
+ * Si la conversion échoue, elle retourne 0.
+ * @param {string|number} positiveRatings - Le nombre d'avis positifs à normaliser.
+ * @returns {number} - Le nombre d'avis positifs normalisé en nombre.
+ */
 function normalizePositiveRatings(positiveRatings) {
     const parsedRatings = Number(positiveRatings)
 
@@ -418,6 +524,13 @@ function normalizePositiveRatings(positiveRatings) {
     return parsedRatings
 }
 
+/**
+ * normalizeReleaseDate convertit une chaîne de caractères représentant
+ * une date de sortie en un nombre de millisecondes depuis le 1er janvier 1970.
+ * Si la conversion échoue, elle retourne 0.
+ * @param {string|number} releaseDate - La date de sortie à normaliser.
+ * @returns {number} - La date de sortie normalisée en millisecondes.
+ */
 function normalizeReleaseDate(releaseDate) {
     const timeValue = Date.parse(releaseDate)
 
@@ -428,6 +541,11 @@ function normalizeReleaseDate(releaseDate) {
     return timeValue
 }
 
+/**
+ * applySorting trie un tableau de jeux en fonction du critère de tri sélectionné dans l'état de l'application.
+ * @param {Array} games - Un tableau d'objets représentant les jeux à trier.
+ * @returns {Array} - Un nouveau tableau de jeux trié selon le critère sélectionné.
+ */
 export function applySorting(games) {
     const sortedGames = games.slice()
 
@@ -464,6 +582,10 @@ export function applySorting(games) {
     return sortedGames
 }
 
+/**
+ * renderFilteredGames filtre les jeux en fonction des critères de recherche, de genre, de plateforme et de prix,
+ * puis les trie et les affiche dans la grille de jeux. Elle met également à jour la pagination et l'URL.
+ */
 function renderFilteredGames() {
     const filteredGames = appState.games.filter(function(game) {
         return (
@@ -492,6 +614,10 @@ function renderFilteredGames() {
     writeStateToUrl(appState)
 }
 
+/**
+ * initSearch initialise le champ de recherche et configure l'écoute des
+ * événements pour filtrer les jeux en fonction du terme de recherche.
+ */
 function initSearch() {
     const searchInput = qs('#search-input')
 
@@ -509,6 +635,11 @@ function initSearch() {
     searchInput.addEventListener('input', handleSearchInput)
 }
 
+/**
+ * initGenreFilter initialise le filtre de genres et configure l'écoute des
+ * événements pour filtrer les jeux en fonction des genres sélectionnés.
+ * @param {Array} games - Un tableau d'objets représentant les jeux.
+ */
 function initGenreFilter(games) {
     const filterHost = qs('#genre-filter')
     clearElement(filterHost)
@@ -531,6 +662,10 @@ function initGenreFilter(games) {
     })
 }
 
+/**
+ * initPlatformFilter initialise le filtre de plateformes et configure l'écoute des événements pour filtrer les jeux en fonction des plateformes sélectionnées.
+ * @param {Array} games - Un tableau d'objets représentant les jeux.
+ */
 export function initPlatformFilter(games) {
     const filterHost = qs('#platform-filter')
 
@@ -558,6 +693,10 @@ export function initPlatformFilter(games) {
     })
 }
 
+/**
+ * initSort initialise le contrôle de tri et configure l'écoute des événements
+ * pour trier les jeux en fonction du critère sélectionné.
+ */
 export function initSort() {
     const searchSection = qs('.search-section')
 
@@ -593,6 +732,10 @@ export function initSort() {
     }
 }
 
+/**
+ * initPriceFilter initialise le filtre de prix et configure l'écoute des événements
+ * pour filtrer les jeux en fonction du prix maximum sélectionné.
+ */
 export function initPriceFilter() {
     const filterHost = qs('#price-filter')
 
@@ -616,6 +759,11 @@ export function initPriceFilter() {
     })
 }
 
+/**
+ * initApp initialise l'application en configurant les filtres, la recherche,
+ * le tri, la pagination et en récupérant les jeux depuis l'API. Elle gère également
+ * l'injection de l'en-tête et du pied de page, ainsi que l'état de chargement.
+ */
 function initApp() {
     const gamesGrid = qs('#games-grid')
     const resetFiltersButton = qs('#reset-filters-btn')
@@ -666,4 +814,10 @@ function initApp() {
         })
 }
 
+/**
+ * initApp est la fonction principale qui initialise l'application. 
+ * Elle configure les filtres, la recherche, le tri, la pagination et récupère 
+ * les jeux depuis l'API. Elle gère également l'injection de l'en-tête et du 
+ * pied de page, ainsi que l'état de chargement.
+ */
 initApp()
